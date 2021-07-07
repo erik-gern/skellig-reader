@@ -1,0 +1,78 @@
+/* page rendering will use columns, since pages can't be created using
+screen media. Pass in as much html to a page render element as needed to fill up to the requested page.
+The page element height will be the page height, 
+the column-width the width of the page, and all unnecessary pages rendered
+off-screen */
+$component: 'book-viewer';
+
+$page-width: 400px;
+$page-height: 600px;
+$page-padding: 50px;
+$page-padding-bottom: $page-padding;
+$page-padding-top: $page-padding;
+$page-padding-left: $page-padding;
+$page-padding-right: $page-padding;
+
+.book-viewer {
+	height: $page-height;
+	width: $page-width;
+	padding: $page-padding;
+	overflow: hidden;
+	font-family: Georgia, serif;
+	font-size: .9em;
+	background: white;	
+	
+	&__page-container {
+		width: $page-width;
+		height: 100%;
+		overflow: hidden;
+		column-width: $page-width;
+		column-gap: 0;
+	}	
+	
+	&__page-scroller {
+		position: relative;
+		top: 0;
+		left: 0;
+	}
+	
+	&__page-stats {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: $page-width;
+		text-align: center;
+	}
+	
+	&__page {
+		
+		margin-left: 0;
+			
+		h1, h2, h3,
+		h4, h5, h6 {
+			text-align: center;
+			margin: 1em 0 1em;
+		}
+		
+		p {
+			text-align: justify;
+			margin: 0;
+			text-indent: .25in;
+			
+			&:first-child {
+				text-indent: 0;
+			}
+		}
+		
+		img {
+			break-inside: avoid;
+			page-break-inside: avoid;
+			max-height: 80% !important;
+			max-width: 80% !important;
+			height: auto !important;
+			width: auto !important;
+		}
+		
+	}
+
+}

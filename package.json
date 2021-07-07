@@ -1,0 +1,40 @@
+{
+  "name": "skellig-reader",
+  "productName": "Skellig Reader",
+  "version": "1.0.0",
+  "description": "Electron-based ebook reader",
+  "main": "src/main.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha --recursive",
+    "start": "electron .",
+    "build": "npm run build-static && npm run build-scss && npm run build-typescript && npm run build-browserify",
+    "build-static": "cp static/index.html build/index.html",
+    "build-scss": "sass scss/index.scss build/styles.css",
+    "build-typescript": "tsc",
+    "build-browserify": "browserify src/ui.js -o build/ui.js && browserify src/preload.js -o build/preload.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/react": "^17.0.11",
+    "@types/react-dom": "^17.0.8",
+    "adm-zip": "^0.5.5",
+    "dompurify": "^2.2.9",
+    "jsdom": "^16.6.0",
+    "marked": "^2.1.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "sass": "^1.35.1"
+  },
+  "devDependencies": {
+    "@types/node": "^15.12.4",
+    "browserify": "^17.0.0",
+    "chai": "^4.3.4",
+    "electron": "^13.1.2",
+    "mocha": "^9.0.1",
+    "typescript": "^4.3.3"
+  }
+}
