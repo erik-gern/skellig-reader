@@ -37,12 +37,33 @@ module.exports = function(grunt){
 			test: {
 				src: ['test/**/*.js']
 			}
-		}
+		},
+		watch: {
+			scripts: {
+				files: 'src/**/*.ts',
+				tasks: ['ts', 'browserify'],
+				options: {
+					interrupt: true,
+					debounceDelay: 1000,
+					livereload: true,
+				},
+			},
+			styles: {
+				files: ['scss/**/*.scss'],
+				tasks: ['sass'],
+				options: {
+					interrupt: true,
+					debounceDelay: 1000,
+					livereload: true,
+				},
+			},
+		},
 	});
 	
 	grunt.loadNpmTasks('grunt-browserify');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-copy');
+	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-mocha-test');
 	grunt.loadNpmTasks('grunt-sass');
 	grunt.loadNpmTasks('grunt-ts');
