@@ -1,8 +1,8 @@
 // App.tsc
 
 const { expect } = require('chai');
-const App = require('../../src/components/App').default;
-const { PreloadRegistry } = require('../../src/util');
+const App = require('../../dist/components/App').default;
+const { PreloadRegistry } = require('../../dist/util');
 
 describe('App', function() {
 	beforeEach(function(){

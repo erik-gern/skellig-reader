@@ -1,6 +1,6 @@
 // pause.test.js
 
-const { pause } = require('../../src/util');
+const { pause } = require('../../dist/util');
 const { expect } = require('chai');
 
 describe('util/pause()', function(){

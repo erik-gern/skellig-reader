@@ -1,4 +1,4 @@
-const { getPlatform, PreloadRegistry } = require('../../src/util');
+const { getPlatform, PreloadRegistry } = require('../../dist/util');
 const { expect } = require('chai');
 
 describe('util/getPlatform()', function(){

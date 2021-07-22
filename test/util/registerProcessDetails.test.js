@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 
-const { registerProcessDetails, PreloadRegistry } = require('../../src/util');
-const ipc = require('../../src/ipc');
+const { registerProcessDetails, PreloadRegistry } = require('../../dist/util');
+const ipc = require('../../dist/ipc');
 
 describe('util/registerProcessDetails()', function(){
 	const thisPlatform = 'this-platform';

@@ -1,4 +1,4 @@
-const { PreloadRegistry } = require('../../src/util');
+const { PreloadRegistry } = require('../../dist/util');
 const { expect } = require('chai');
 
 describe('util/PreloadRegistry', function(){

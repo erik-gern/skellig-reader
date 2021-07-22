@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 
-const { runTask } = require('../../src/ipc');
-const { PreloadRegistry } = require('../../src/util');
+const { runTask } = require('../../dist/ipc');
+const { PreloadRegistry } = require('../../dist/util');
 const MockIpcRenderer = require('./_MockIpcRenderer');
 
 describe('ipc/runTask()', function(){

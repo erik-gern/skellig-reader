@@ -3,7 +3,7 @@ const sass = require('sass');
 module.exports = function(grunt){
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
-		clean: ['build/*', '!build/.gitignore'],
+		clean: ['build/*', 'dist/*', '!build/.gitignore', '!dist/.gitignore'],
 		copy: {
 			main: {
 				files: [ { expand: true, cwd: 'static', src: '**', dest: 'build/', } ],
@@ -28,8 +28,8 @@ module.exports = function(grunt){
 		browserify: {
 			dist: {
 				files: {
-					'build/ui.js': ['src/ui.js'],
-					'build/preload.js': ['src/preload.js'],
+					'build/ui.js': ['dist/ui.js'],
+					'build/preload.js': ['dist/preload.js'],
 				},
 			},
 		},
@@ -49,5 +49,5 @@ module.exports = function(grunt){
 	
 	grunt.registerTask('build', ['clean', 'copy', 'sass', 'ts', 'browserify']);
 	grunt.registerTask('test', ['mochaTest']);
-	
+		
 };

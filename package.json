@@ -3,7 +3,7 @@
   "productName": "Skellig Reader",
   "version": "1.0.0",
   "description": "Electron-based ebook reader",
-  "main": "src/main.js",
+  "main": "dist/main.js",
   "directories": {
     "test": "test"
   },

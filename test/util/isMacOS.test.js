@@ -1,4 +1,4 @@
-const { isMacOS, PreloadRegistry } = require('../../src/util');
+const { isMacOS, PreloadRegistry } = require('../../dist/util');
 const { expect } = require('chai');
 
 describe('util/isMacOS()', function(){

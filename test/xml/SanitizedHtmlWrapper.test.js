@@ -1,6 +1,6 @@
 const { expect } = require('chai');
 
-const { SanitizedHtmlWrapper } = require('../../src/xml');
+const { SanitizedHtmlWrapper } = require('../../dist/xml');
 
 const testDirtyHtml = '<html><head><script src="bad.js"></script></head><body><p>Hello</p></body></html>';
 const testCleanHtml = '<p>Hello</p>';

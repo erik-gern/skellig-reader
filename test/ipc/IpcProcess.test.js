@@ -1,5 +1,5 @@
 const { expect } = require('chai');
-const IpcProcess = require('../../src/ipc/IpcProcess').default;
+const IpcProcess = require('../../dist/ipc/IpcProcess').default;
 
 function TestObj() {
 	return this;

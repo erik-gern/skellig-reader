@@ -1,4 +1,4 @@
-const { getAppName, PreloadRegistry } = require('../../src/util');
+const { getAppName, PreloadRegistry } = require('../../dist/util');
 const { expect } = require('chai');
 
 describe('util/getAppName()', function(){

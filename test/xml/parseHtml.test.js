@@ -1,5 +1,5 @@
 const { expect } = require('chai');
-const { parseHtml } = require('../../src/xml');
+const { parseHtml } = require('../../dist/xml');
 
 const tests = [
 	'<html><head></head><body><h1>Hello, world!</h1></body></html>',
