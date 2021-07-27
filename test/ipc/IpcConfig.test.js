@@ -10,7 +10,11 @@ describe('ipc/IpcConfig', function(){
 	let ipcConfig;
 	
 	beforeEach(function(){
-		ipcConfig = new IpcConfig(config);
+		ipcConfig = IpcConfig.getInstance();
+		ipcConfig.set(config);
+	});
+	afterEach(function(){
+		IpcConfig.instance = null;
 	});
 	
 	describe('::constructor()', function(){
@@ -50,8 +54,8 @@ describe('ipc/IpcConfig', function(){
 	
 	describe('::checkChannelType()', function(){
 		const tests = {
-			'correct type': [false, 'foo-bar.event', 'event'],
-			'incorrect type': [true, 'foo-bar.event', 'task'],
+			'correct type': [false, 'foo-bar.message', 'message'],
+			'incorrect type': [true, 'foo-bar.message', 'task'],
 		};
 		Object.keys(tests).forEach(function(desc){
 			const [willThrow, channel, type] = tests[desc];
@@ -68,10 +72,10 @@ describe('ipc/IpcConfig', function(){
 	
 	describe('::checkChannelArgs()', function(){
 		const tests = {
-			'correct arguments and types': [false, 'foo-bar.event', [ 'foo', 1 ]],
-			'too few arguments': [true, 'foo-bar.event', [ 'foo' ]],
-			'wrong argument types': [true, 'foo-bar.event', [ 'foo', 'bar' ]],
-			'too many arguments': [true, 'foo-bar.event', [ 'foo', 'bar', 'baz' ]],
+			'correct arguments and types': [false, 'foo-bar.message', [ 'foo', 1 ]],
+			'too few arguments': [true, 'foo-bar.message', [ 'foo' ]],
+			'wrong argument types': [true, 'foo-bar.message', [ 'foo', 'bar' ]],
+			'too many arguments': [true, 'foo-bar.message', [ 'foo', 'bar', 'baz' ]],
 		};
 		Object.keys(tests).forEach(function(desc) {
 			const [willThrow, channel, args] = tests[desc];
