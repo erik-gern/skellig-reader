@@ -7,12 +7,18 @@ import {
 	dialog,
 	Menu,
 } from 'electron';
+import * as yaml from 'js-yaml';
 import { 
 	getArchiveInfo,
 	getFileInArchive,
 } from './server';
+import { IpcConfig } from './ipc';
 
 let mainWindow;
+
+// set ipc spec
+const ipcSpec = yaml.load(fs.readFileSync(__dirname + '/ipc/ipc-spec.yaml', 'utf-8'));
+IpcConfig.getInstance().set(ipcSpec);
 
 function createWindow () {
 	mainWindow = new BrowserWindow({
@@ -62,9 +68,9 @@ ipcMain.handle('menu.create', (event, template: MenuTemplate) => {
 			}
 			// add event handling to menu items with id and without a role
 			if (item.id && !item.role) {
-				const eventName = 'menu.trigger.' + item.id;
+				const eventName = 'menu.trigger';
 				item.click = (_a, _b, _c) => {
-					event.sender.send(eventName);
+					event.sender.send(eventName, item.id);
 				}
 			}
 			// translate submenus recursively

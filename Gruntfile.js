@@ -6,7 +6,12 @@ module.exports = function(grunt){
 		clean: ['build/*', 'dist/*', '!build/.gitignore', '!dist/.gitignore'],
 		copy: {
 			main: {
-				files: [ { expand: true, cwd: 'static', src: '**', dest: 'build/', } ],
+				files: [ 
+					{ expand: true, cwd: 'static', src: '**', dest: 'build/', } 
+				],
+			},
+			ipcSpec: {
+				files: [{ src: 'src/ipc/ipc-spec.yaml', dest: 'dist/ipc/ipc-spec.yaml' }],
 			},
 		},
 		sass: {
@@ -30,6 +35,11 @@ module.exports = function(grunt){
 				files: {
 					'build/ui.js': ['dist/ui.js'],
 					'build/preload.js': ['dist/preload.js'],
+				},
+				options: {
+					transform: [
+						'brfs',
+					],
 				},
 			},
 		},
@@ -68,7 +78,7 @@ module.exports = function(grunt){
 	grunt.loadNpmTasks('grunt-sass');
 	grunt.loadNpmTasks('grunt-ts');
 	
-	grunt.registerTask('build', ['clean', 'copy', 'sass', 'ts', 'browserify']);
+	grunt.registerTask('build', ['clean', 'copy:main', 'sass', 'ts', 'copy:ipcSpec', 'browserify']);
 	grunt.registerTask('test', ['mochaTest']);
 		
 };

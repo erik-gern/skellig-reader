@@ -1,8 +1,14 @@
 import { PreloadRegistry } from '../util';
+import IpcConfig from './IpcConfig';
 
-export default function handleEvent(id, name, callback) {
+export default function handleEvent(id, channel, callback) {
 	if (id == 'main') {
-		PreloadRegistry.getInstance().get<Electron.IpcRenderer>('ipcRenderer').on(name, (e, ...args) => {
+		const ipcConfig = IpcConfig.getInstance();
+		// validate
+		ipcConfig.checkChannelName(channel);
+		ipcConfig.checkChannelType(channel, 'message');
+
+		PreloadRegistry.getInstance().get<Electron.IpcRenderer>('ipcRenderer').on(channel, (e, ...args) => {
 			callback(...args);
 		});
 	}

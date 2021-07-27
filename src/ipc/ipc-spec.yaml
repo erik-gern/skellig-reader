@@ -1,0 +1,36 @@
+io.file-read:
+  type: task
+  args:
+  - string
+  - boolean
+  ret: string
+io.archive-list:
+  type: task
+  args:
+  - string
+  ret: array
+io.archive-file-read:
+  type: task
+  args:
+  - string
+  - string
+  - boolean
+  ret: string
+io.file-select:
+  type: task
+  args:
+  - array
+  ret: string
+menu.trigger:
+  type: message
+  dir: up
+  ret: string
+process.details:
+  type: task
+  args: []
+  ret: object
+menu.create:
+  type: task
+  args: 
+  - array
+  ret: 'null'
