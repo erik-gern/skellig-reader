@@ -66,7 +66,7 @@ describe('ipc/IpcConfig', function(){
 				else {
 					expect(function(){ ipcConfig.checkChannelType(channel, type); }).not.to.throw();
 				}
-			})
+			});
 		});
 	})
 	

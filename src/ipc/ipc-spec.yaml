@@ -20,7 +20,7 @@ io.file-select:
   type: task
   args:
   - array
-  ret: string
+  ret: array
 menu.trigger:
   type: message
   dir: up
