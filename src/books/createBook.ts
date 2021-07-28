@@ -1,5 +1,6 @@
 import EPubBook from './EPubBook';
 import MarkdownBook from './MarkdownBook';
+import RTFBook from './RTFBook';
 import Book from './Book';
 
 export default async function createBook(file: string): Promise<Book> {
@@ -7,6 +8,9 @@ export default async function createBook(file: string): Promise<Book> {
 	let ext = fileParts[fileParts.length - 1];
 	let book: Book;
 	switch (ext) {
+		case 'rtf':
+			book = new RTFBook(file);
+			break;
 		case 'epub':
 			book = new EPubBook(file);
 			break;

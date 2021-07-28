@@ -1,3 +1,5 @@
+require('module-alias/register');
+
 import * as fs from 'fs';
 import { promisify } from 'util';
 import {

@@ -3,7 +3,14 @@ const sass = require('sass');
 module.exports = function(grunt){
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
-		clean: ['build/*', 'dist/*', '!build/.gitignore', '!dist/.gitignore'],
+		clean: [
+			'build/*', 
+			'dist/*', 
+			'lib/*',
+			'!build/.gitignore', 
+			'!dist/.gitignore',
+			'!lib/.gitignore',
+		],
 		copy: {
 			main: {
 				files: [ 
@@ -12,6 +19,22 @@ module.exports = function(grunt){
 			},
 			ipcSpec: {
 				files: [{ src: 'src/ipc/ipc-spec.yaml', dest: 'dist/ipc/ipc-spec.yaml' }],
+			},
+			lib: {
+				files: [
+					{ expand: true, cwd: 'node_modules/rtf.js', src: '**', dest: 'lib/rtf.js' },
+				],
+			},
+		},
+		babel: {
+			options: {
+				sourceMap: true,
+				presets: ['@babel/preset-env'],
+			},
+			lib: {
+				files: {
+					'lib/rtf.js/index.compiled.js': 'lib/rtf.js/index.js',
+				},
 			},
 		},
 		sass: {
@@ -45,8 +68,11 @@ module.exports = function(grunt){
 		},
 		mochaTest: {
 			test: {
-				src: ['test/**/*.js']
-			}
+				options: {
+					require: 'module-alias/register',	
+				},
+				src: ['test/**/*.js'],
+			},
 		},
 		watch: {
 			scripts: {
@@ -70,6 +96,7 @@ module.exports = function(grunt){
 		},
 	});
 	
+	grunt.loadNpmTasks('grunt-babel');
 	grunt.loadNpmTasks('grunt-browserify');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-copy');
@@ -78,7 +105,16 @@ module.exports = function(grunt){
 	grunt.loadNpmTasks('grunt-sass');
 	grunt.loadNpmTasks('grunt-ts');
 	
-	grunt.registerTask('build', ['clean', 'copy:main', 'sass', 'ts', 'copy:ipcSpec', 'browserify']);
+	grunt.registerTask('build', [
+		'clean', 
+		'copy:lib', 
+		'copy:main', 
+		'babel:lib',
+		'sass', 
+		'ts', 
+		'copy:ipcSpec',
+		'browserify'
+	]);
 	grunt.registerTask('test', ['mochaTest']);
 		
 };
