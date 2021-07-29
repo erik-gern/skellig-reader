@@ -1,4 +1,4 @@
-import { getArchiveInfo, getFileInArchive } from '../fileops';
+import { getArchiveInfo, getFileInArchiveAsBase64, getFileInArchiveAsText } from '../fileops';
 import { parseXml, parseHtml, SanitizedHtmlWrapper } from '../xml';
 import Book from './Book';
 
@@ -44,7 +44,7 @@ export default class EPubBook extends Book {
 	
 	async getContainerXml() {
 		// we already know the container.xml path, so just get the contents and parse into xml
-		let containerXmlStr = await getFileInArchive(this.containerXmlFile, this.archivePath);
+		let containerXmlStr = await getFileInArchiveAsText(this.containerXmlFile, this.archivePath);
 		this.containerXml = await parseXml(containerXmlStr);
 	}
 		
@@ -53,7 +53,7 @@ export default class EPubBook extends Book {
 		const rootfileEl = this.containerXml.querySelector('rootfile');
 		this.contentOpfFile = rootfileEl.getAttribute('full-path');
 		// get the contents of the file and parse into xml
-		const contentOpfStr = await getFileInArchive(this.contentOpfFile, this.archivePath);
+		const contentOpfStr = await getFileInArchiveAsText(this.contentOpfFile, this.archivePath);
 		this.contentOpf = await parseXml(contentOpfStr);
 	}
 
@@ -88,7 +88,7 @@ export default class EPubBook extends Book {
 		const tocItem = this.contentOpf.querySelector('manifest item[id=ncx]');
 		this.tocNcxFile = this.contentFolder + '/' + tocItem.getAttribute('href');
 		// get the file contents and parse into xml
-		let tocNcxStr = await getFileInArchive(this.tocNcxFile, this.archivePath);
+		let tocNcxStr = await getFileInArchiveAsText(this.tocNcxFile, this.archivePath);
 		this.tocNcx = await parseXml(tocNcxStr);
 	}
 	
@@ -98,7 +98,7 @@ export default class EPubBook extends Book {
 		
 		for (let i = 0; i < this.contentFiles.length; i++) {
 			let chunkFile: string = this.contentFiles[i];
-			let chunkDirty = await getFileInArchive(chunkFile, this.archivePath);
+			let chunkDirty = await getFileInArchiveAsText(chunkFile, this.archivePath);
 						
 			let doc: Document = await parseHtml(chunkDirty);
 			let head = doc.getElementsByTagName('head')[0];
@@ -109,7 +109,7 @@ export default class EPubBook extends Book {
 			for (let i = 0; i < images.length; i++) {
 				const el = images[i];
 				let imageFile = this.contentFolder + '/' + el.getAttribute('src');
-				let imageData64 = await getFileInArchive(imageFile, this.archivePath, true);
+				let imageData64 = await getFileInArchiveAsBase64(imageFile, this.archivePath);
 				el.setAttribute('src', 'data:image/jpeg;base64,'+imageData64);
 			}
 			

@@ -13,8 +13,7 @@ export default class RTFBook extends Book {
 	}
 	
 	async load(): Promise<void> {
-		const base64Data = await getFile(this.filePath, true);
-		this.data = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));	
+		this.data = await getFile(this.filePath);
 	}
 	
 	async renderHtml(): Promise<SanitizedHtmlWrapper> {

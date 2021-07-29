@@ -2,8 +2,7 @@ io.file-read:
   type: task
   args:
   - string
-  - boolean
-  ret: string
+  ret: ArrayBuffer
 io.archive-list:
   type: task
   args:
@@ -14,8 +13,7 @@ io.archive-file-read:
   args:
   - string
   - string
-  - boolean
-  ret: string
+  ret: ArrayBuffer
 io.file-select:
   type: task
   args:

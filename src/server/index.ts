@@ -1,9 +1,11 @@
 import getArchiveInfo from './getArchiveInfo';
-import getFileInArchive from './getFileInArchive';
+import getFileData from './getFileData';
+import getFileDataInArchive from './getFileDataInArchive';
 import openArchive from './openArchive';
 
 export {
 	getArchiveInfo,
-	getFileInArchive,
+	getFileData,
+	getFileDataInArchive,
 	openArchive,
 };

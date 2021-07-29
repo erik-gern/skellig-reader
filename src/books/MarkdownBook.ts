@@ -1,5 +1,5 @@
 import * as marked from 'marked';
-import { getFile } from '../fileops';
+import { getFileAsText } from '../fileops';
 import { SanitizedHtmlWrapper } from '../xml';
 import Book from './Book';
 
@@ -13,7 +13,7 @@ export default class MarkdownBook extends Book {
 	}
 	
 	async load(): Promise<void> {
-		this.markdown = await getFile(this.filePath);	
+		this.markdown = await getFileAsText(this.filePath);	
 	}
 	
 	async renderHtml(): Promise<SanitizedHtmlWrapper> {

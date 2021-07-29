@@ -12,7 +12,8 @@ import {
 import * as yaml from 'js-yaml';
 import { 
 	getArchiveInfo,
-	getFileInArchive,
+	getFileDataInArchive,
+	getFileData,
 } from './server';
 import { IpcConfig } from './ipc';
 
@@ -97,16 +98,14 @@ ipcMain.handle('io.file-select', async (event, allowedExtensions) => {
 	return ret.filePaths;
 });
 
-const readFilePromise = promisify(fs.readFile);
-ipcMain.handle('io.file-read', async (event, file, asBase64) => {
-	const data = await readFilePromise(file);
-	return data.toString(asBase64 ? 'base64' : 'utf-8');
+ipcMain.handle('io.file-read', async (event, file) => {
+	return await getFileData(file);
 });
 
 ipcMain.handle('io.archive-list', async (event, archivePath) => {
 	return await getArchiveInfo(archivePath);
 });
 
-ipcMain.handle('io.archive-file-read', async (event, file, archivePath, asBase64) => {
-	return await getFileInArchive(file, archivePath, asBase64);
+ipcMain.handle('io.archive-file-read', async (event, file, archivePath) => {
+	return await getFileDataInArchive(file, archivePath);
 });
