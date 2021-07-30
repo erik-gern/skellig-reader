@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import { promisify } from 'util';
 import { app, BrowserWindow, dialog, Menu } from 'electron';
 import * as yaml from 'js-yaml';
-import { getArchiveInfo, getFileDataInArchive, getFileData, handleTask } from './server';
+import { getArchiveInfo, getFileDataInArchive, getFileData, handleTask, sendMessage } from './server';
 import { IpcConfig } from './ipc';
 
 let mainWindow;
@@ -52,28 +52,27 @@ handleTask('process.details', async (event) => {
 	return details;
 });
 
-handleTask('menu.create', (event, template: MenuTemplate) => {
-	const translateTemplate = (menu: MenuTemplate) => {
-		menu.forEach((item: MenuTemplateItem, i: number) => {
+handleTask('menu.create', (event, template: Electron.MenuItemConstructorOptions[]) => {
+	const translateTemplate = (menu: Electron.MenuItemConstructorOptions[]) => {
+		menu.forEach((item: Electron.MenuItemConstructorOptions, i: number) => {
 			// add app name to label
 			if (item.label) {
 				item.label = item.label.replace('[APP_NAME]', app.name);
 			}
 			// add event handling to menu items with id and without a role
 			if (item.id && !item.role) {
-				const eventName = 'menu.trigger';
 				item.click = (_a, _b, _c) => {
-					event.sender.send(eventName, item.id);
+					sendMessage(event.sender, 'menu.trigger', item.id);
 				}
 			}
 			// translate submenus recursively
 			if (item.submenu) {
-				translateTemplate(item.submenu);
+				translateTemplate(item.submenu as Electron.MenuItemConstructorOptions[]);
 			}
 		});
 	};
 	translateTemplate(template);
-	const menu: Electron.Menu = Menu.buildFromTemplate((template as unknown) as Electron.MenuItemConstructorOptions[]);
+	const menu: Electron.Menu = Menu.buildFromTemplate(template);
 	Menu.setApplicationMenu(menu);
 });
 

@@ -3,6 +3,7 @@ import getFileData from './getFileData';
 import getFileDataInArchive from './getFileDataInArchive';
 import openArchive from './openArchive';
 import handleTask from './handleTask';
+import sendMessage from './sendMessage';
 
 export {
 	getArchiveInfo,
@@ -10,4 +11,5 @@ export {
 	getFileDataInArchive,
 	openArchive,
 	handleTask,
+	sendMessage,
 };
