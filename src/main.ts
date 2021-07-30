@@ -2,19 +2,9 @@ require('module-alias/register');
 
 import * as fs from 'fs';
 import { promisify } from 'util';
-import {
-	app,
-	BrowserWindow,
-	ipcMain,
-	dialog,
-	Menu,
-} from 'electron';
+import { app, BrowserWindow, dialog, Menu } from 'electron';
 import * as yaml from 'js-yaml';
-import { 
-	getArchiveInfo,
-	getFileDataInArchive,
-	getFileData,
-} from './server';
+import { getArchiveInfo, getFileDataInArchive, getFileData, handleTask } from './server';
 import { IpcConfig } from './ipc';
 
 let mainWindow;
@@ -50,7 +40,7 @@ app.on('window-all-closed', function(){
 	app.quit();
 });
 
-ipcMain.handle('process.details', async (event) => {
+handleTask('process.details', async (event) => {
 	const details = {
 		app: {
 			name: app.name,
@@ -62,7 +52,7 @@ ipcMain.handle('process.details', async (event) => {
 	return details;
 });
 
-ipcMain.handle('menu.create', (event, template: MenuTemplate) => {
+handleTask('menu.create', (event, template: MenuTemplate) => {
 	const translateTemplate = (menu: MenuTemplate) => {
 		menu.forEach((item: MenuTemplateItem, i: number) => {
 			// add app name to label
@@ -87,7 +77,7 @@ ipcMain.handle('menu.create', (event, template: MenuTemplate) => {
 	Menu.setApplicationMenu(menu);
 });
 
-ipcMain.handle('io.file-select', async (event, allowedExtensions) => {
+handleTask('io.file-select', async (event, allowedExtensions) => {
 	const ret = await dialog.showOpenDialog(mainWindow, {
 		title: 'Open a Book File',
 		filters: [
@@ -98,14 +88,14 @@ ipcMain.handle('io.file-select', async (event, allowedExtensions) => {
 	return ret.filePaths;
 });
 
-ipcMain.handle('io.file-read', async (event, file) => {
+handleTask('io.file-read', async (event, file) => {
 	return await getFileData(file);
 });
 
-ipcMain.handle('io.archive-list', async (event, archivePath) => {
+handleTask('io.archive-list', async (event, archivePath) => {
 	return await getArchiveInfo(archivePath);
 });
 
-ipcMain.handle('io.archive-file-read', async (event, file, archivePath) => {
+handleTask('io.archive-file-read', async (event, file, archivePath) => {
 	return await getFileDataInArchive(file, archivePath);
 });
