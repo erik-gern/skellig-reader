@@ -10,9 +10,9 @@ export default function runTask(id, channel, args): Promise<any> {
 		ipcConfig.checkChannelArgs(channel, args);
 		
 		return new Promise((resolve, reject) => {
-			let invokeArgs = args.slice();
+			const invokeArgs = args.slice();
 			invokeArgs.unshift(channel);
-			let ipcRenderer: Electron.IpcRenderer = PreloadRegistry.getInstance().get<Electron.IpcRenderer>('ipcRenderer');
+			const ipcRenderer: Electron.IpcRenderer = PreloadRegistry.getInstance().get<Electron.IpcRenderer>('ipcRenderer');
 			ipcRenderer.invoke.apply(ipcRenderer, invokeArgs).then(function(ret){
 				resolve(ret);
 			});

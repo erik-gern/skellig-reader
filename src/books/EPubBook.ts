@@ -44,7 +44,7 @@ export default class EPubBook extends Book {
 	
 	async getContainerXml() {
 		// we already know the container.xml path, so just get the contents and parse into xml
-		let containerXmlStr = await getFileInArchiveAsText(this.containerXmlFile, this.archivePath);
+		const containerXmlStr = await getFileInArchiveAsText(this.containerXmlFile, this.archivePath);
 		this.containerXml = await parseXml(containerXmlStr);
 	}
 		
@@ -59,73 +59,61 @@ export default class EPubBook extends Book {
 
 	getContentFolder() {
 		// use the content.opf path to get the main content folder
-		let contentFolderParts = this.contentOpfFile.split('/')
+		const contentFolderParts = this.contentOpfFile.split('/')
 		contentFolderParts.pop();
 		this.contentFolder = contentFolderParts.join('/');		
 	}
 	
 	getContentFiles() {
-		let itemRefs: NodeListOf<Element> = this.contentOpf
+		const itemRefs: NodeListOf<Element> = this.contentOpf
 			.querySelectorAll('package spine itemref');
-		let itemIds: string[] = [...itemRefs].map((e) => { return e.getAttribute('idref'); });
-		console.log(itemIds);
+		const itemIds: string[] = [...itemRefs].map((e) => { return e.getAttribute('idref'); });
 			
-		let items: Element[] = [
-			...this.contentOpf.querySelectorAll('package manifest item')
-		].filter((e) => { return itemIds.indexOf(e.getAttribute('id')) != -1; });
-		console.log(items);
+		const items: Element[] = [...this.contentOpf.querySelectorAll('package manifest item')]
+			.filter((e) => { return itemIds.indexOf(e.getAttribute('id')) != -1; });
 			
 		this.contentFiles = items.map((el: Element): string => {
-			let chunkFile: string = el.getAttribute('href');
-			chunkFile = this.contentFolder + '/' + chunkFile;
+			const chunkFile: string = this.contentFolder + '/' + el.getAttribute('href');
 			return chunkFile;
 		});
-		
-		console.log(this.contentFiles);
 	}
 
 	async getTocNcx() {
 		const tocItem = this.contentOpf.querySelector('manifest item[id=ncx]');
 		this.tocNcxFile = this.contentFolder + '/' + tocItem.getAttribute('href');
 		// get the file contents and parse into xml
-		let tocNcxStr = await getFileInArchiveAsText(this.tocNcxFile, this.archivePath);
+		const tocNcxStr = await getFileInArchiveAsText(this.tocNcxFile, this.archivePath);
 		this.tocNcx = await parseXml(tocNcxStr);
 	}
 	
 	async renderHtml(): Promise<SanitizedHtmlWrapper> {
-		
-		let dirtyChunks: string[] = [];
-		
-		for (let i = 0; i < this.contentFiles.length; i++) {
-			let chunkFile: string = this.contentFiles[i];
-			let chunkDirty = await getFileInArchiveAsText(chunkFile, this.archivePath);
+		const dirtyChunks: string[] = await Promise.all(this.contentFiles.map(async (chunkFile: string) => {
+			const chunkDirty = await getFileInArchiveAsText(chunkFile, this.archivePath);
 						
-			let doc: Document = await parseHtml(chunkDirty);
-			let head = doc.getElementsByTagName('head')[0];
-			let body = doc.getElementsByTagName('body')[0];
+			const doc: Document = await parseHtml(chunkDirty);
+			const head = doc.getElementsByTagName('head')[0];
+			const body = doc.getElementsByTagName('body')[0];
 			
 			// inline image data
-			let images = body.querySelectorAll('img');
-			for (let i = 0; i < images.length; i++) {
-				const el = images[i];
-				let imageFile = this.contentFolder + '/' + el.getAttribute('src');
-				let imageData64 = await getFileInArchiveAsBase64(imageFile, this.archivePath);
+			await Promise.all([...body.querySelectorAll('img')].map(async (el) => {
+				const imageFile = this.contentFolder + '/' + el.getAttribute('src');
+				const imageData64 = await getFileInArchiveAsBase64(imageFile, this.archivePath);
 				el.setAttribute('src', 'data:image/jpeg;base64,'+imageData64);
-			}
+			}));
 			
-			dirtyChunks.push(body.innerHTML);
-		}
+			return body.innerHTML;
+		}));
 		
-		let bodyClean: SanitizedHtmlWrapper = await SanitizedHtmlWrapper.create(dirtyChunks.join(''));
+		const bodyClean: SanitizedHtmlWrapper = await SanitizedHtmlWrapper.create(dirtyChunks.join(''));
 		
 		return bodyClean;
 	}
 	
 	getCoverFile(): string {
-		let coverEl = this.contentOpf.querySelector('meta[name=cover]');
-		let coverId = coverEl.getAttribute('content');
-		let coverItem = this.contentOpf.querySelector('manifest item[id=' + coverId + ']');
-		let coverFile: string = this.contentFolder + '/' + coverItem.getAttribute('href');
+		const coverEl = this.contentOpf.querySelector('meta[name=cover]');
+		const coverId = coverEl.getAttribute('content');
+		const coverItem = this.contentOpf.querySelector('manifest item[id=' + coverId + ']');
+		const coverFile: string = this.contentFolder + '/' + coverItem.getAttribute('href');
 		return coverFile;
 	}
 	

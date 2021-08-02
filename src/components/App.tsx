@@ -105,12 +105,11 @@ export default class App extends React.Component {
 	
 	async openBook() {
 		try {
-			let bookFiles = await selectFile(['epub', 'md', 'txt', 'rtf']);
+			const bookFiles = await selectFile(['epub', 'md', 'txt', 'rtf']);
 			if (bookFiles.length == 0) {
 				return;
 			}
-			let bookFile = bookFiles[0];
-			let book = await createBook(bookFile);
+			const book = await createBook(bookFiles[0]);
 			this.setState({book});
 		}
 		catch (e) {

@@ -17,8 +17,8 @@ export default class MarkdownBook extends Book {
 	}
 	
 	async renderHtml(): Promise<SanitizedHtmlWrapper> {
-		let htmlStrDirty = marked(this.markdown);
-		let htmlStrClean = await SanitizedHtmlWrapper.create(htmlStrDirty)
+		const htmlStrDirty = marked(this.markdown);
+		const htmlStrClean = await SanitizedHtmlWrapper.create(htmlStrDirty)
 		return htmlStrClean;
 	}
 	

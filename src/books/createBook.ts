@@ -4,8 +4,8 @@ import RTFBook from './RTFBook';
 import Book from './Book';
 
 export default async function createBook(file: string): Promise<Book> {
-	let fileParts = file.split('.');
-	let ext = fileParts[fileParts.length - 1];
+	const fileParts = file.split('.');
+	const ext = fileParts[fileParts.length - 1];
 	let book: Book;
 	switch (ext) {
 		case 'rtf':

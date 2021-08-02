@@ -100,15 +100,14 @@ export default class BookViewer extends React.Component {
 	}
 	
 	async renderBook() {
-		let pageHtml: SanitizedHtmlWrapper = await this.props.book.renderHtml();
+		const pageHtml: SanitizedHtmlWrapper = await this.props.book.renderHtml();
 		this.setState({pageHtml});
 		window.setTimeout(() => { this.calculatePages(); }, 2000);
 	}
 	
 	async calculatePages() {
-		let bookWidth = ((this.pageElRef.current as unknown) as ElementWithStyles).scrollWidth;
-		console.log(bookWidth, this.state.pageWidth);
-		let totalPages = Math.ceil(bookWidth / this.state.pageWidth);
+		const bookWidth = ((this.pageElRef.current as unknown) as ElementWithStyles).scrollWidth;
+		const totalPages = Math.ceil(bookWidth / this.state.pageWidth);
 		this.setState({totalPages});
 	}
 		

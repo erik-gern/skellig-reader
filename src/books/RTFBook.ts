@@ -17,10 +17,10 @@ export default class RTFBook extends Book {
 	}
 	
 	async renderHtml(): Promise<SanitizedHtmlWrapper> {
-		let doc = new RTFJS.Document(this.data, {});
-		let htmlElements: HTMLElement[] = await doc.render();
-		let htmlStrDirty: string = htmlElements.map((e) => { return e.outerHTML; }).join('');
-		let htmlStrClean = await SanitizedHtmlWrapper.create(htmlStrDirty)
+		const doc = new RTFJS.Document(this.data, {});
+		const htmlElements: HTMLElement[] = await doc.render();
+		const htmlStrDirty: string = htmlElements.map((e) => { return e.outerHTML; }).join('');
+		const htmlStrClean = await SanitizedHtmlWrapper.create(htmlStrDirty)
 		return htmlStrClean;
 	}
 	

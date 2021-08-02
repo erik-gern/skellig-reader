@@ -41,7 +41,7 @@ export default class IpcConfig {
 	}
 	
 	public checkChannelArgs(channel, args: any[]) {
-		let channelConfig = this.config[channel];
+		const channelConfig = this.config[channel];
 		if (args.length > channelConfig.args.length) {
 			throw new Error(
 				`Encountered too many arguments for channel '${channel} (expected ${channelConfig.args.length}, got ${args.length})'`
@@ -53,8 +53,8 @@ export default class IpcConfig {
 			);
 		}
 		for (let i = 0; i < args.length; i++) {
-			let thisArgType = this.getType(args[i]).replace(/\?/gi, '');
-			let expectedArgType = channelConfig.args[i];
+			const thisArgType = this.getType(args[i]).replace(/\?/gi, '');
+			const expectedArgType = channelConfig.args[i];
 			if (thisArgType != expectedArgType) {
 				throw new Error(`Argument at position ${i} must be type '${expectedArgType}', '${thisArgType}'' encountered instead`)
 			}
@@ -62,15 +62,15 @@ export default class IpcConfig {
 	}
 	
 	public checkChannelType(channel: string, type: string) {
-		let expectedType = this.config[channel].type;
+		const expectedType = this.config[channel].type;
 		if (expectedType != type) {
 			throw new Error(`Expected type '${expectedType}' for channel '${channel}', got '${type}' instead`);
 		}
 	}
 
 	public checkChannelRet(channel: string, ret: any) {
-		let retType = this.getType(ret).replace(/\?/gi, '');
-		let expectedRetType = this.config[channel].ret;
+		const retType = this.getType(ret).replace(/\?/gi, '');
+		const expectedRetType = this.config[channel].ret;
 		if (expectedRetType != retType) {
 			throw new Error(`Expected return type '${expectedRetType}' for channel '${channel}', got '${retType}' instead`);
 		}
