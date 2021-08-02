@@ -10,6 +10,7 @@ main();
 
 async function main() {
 	// set ipc spec
+	// use synchronous file read so Browserify can inline it
 	const ipcSpec = yaml.load(fs.readFileSync(__dirname + '/ipc/ipc-spec.yaml', 'utf-8'));
 	IpcConfig.getInstance().set(ipcSpec);
 	
